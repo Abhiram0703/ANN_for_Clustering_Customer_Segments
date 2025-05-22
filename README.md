@@ -50,15 +50,6 @@ Designed 4 different ANN architectures:
 - Applied **softmax** to output for fuzzy clustering
 - Implemented **MMJ K-Means Loss** as training objective
 
-#### 🧮 Loss Function
-\[
-L_s = \frac{1}{N} \sum_{i=1}^{N} \sum_{k=1}^{K} \mathbb{1}\{c_i = k\} \|x_i - \mu_k\|^2 (2 - P(x_i))
-\]
-
-- \( \mu_k \): centroid of cluster k  
-- \( P(x_i) \): soft assignment probability  
-- \( \mathbb{1}\{c_i = k\} \): hard cluster assignment  
-
 ### 4. Evaluation Metric
 Used **Silhouette Coefficient** to assess internal cluster quality:
 - Values range from -1 to 1
