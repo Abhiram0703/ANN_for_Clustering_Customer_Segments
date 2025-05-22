@@ -1,70 +1,147 @@
-================================================
-     ANN for Clustering Customer Segments
-================================================
+# 🧠 ANN for Clustering Customer Segments
 
-Course: DA221, Introduction to AI  
+**Course:** DA221 - Introduction to Artificial Intelligence  
+**Team Name:** *The Upside Down*
 
-
-The Upside Down, Members:
--------------------------
+## 👥 Team Members
 - M. Abhiram (230150015)
 - K. Ashmita (230150014)
 - B. Cherish (230150007)
 
-Description:
-------------
-This project is about clustering customers, based on their purchasing behaviour in a shopping mall.
-Unlike K means algorithm, we used an artificial neural network (ANN) to cluster the dataset. 
-We also implemented a loss function to make it a supervised learning method, rather than competitive learning.
+---
 
-Implementation:
---------------
-- Load and preprocess the dataset
-- Exploratory Data Analysis (EDA) of the dataset using matplotlib and seaborn
-- Normalize numerical features using StandardScaler from Scikit-learn
-- Designing an Autoencoder using PyTorch for Dimensionality Reduction
-- Extracting the Latent Spaces from the Bottleneck Layer
-- Designing an ANN for Clustering using PyTorch
-- Defining MMJ-K-Means Loss for Soft Clustering
-- Training the ANN and visualizing the clusters using matplotlib
-- Defining Silhouette Coefficient which acts as an internal evaluation index for clustering
-- Interpreting the clusters formed from the ANN with the highest Silhoutte Coefficient in terms of marketability
+## 📌 Overview
 
-Libraries Used:
-------------------
-- Pandas, NumPy
-- Matplotlib, Seaborn
-- Scikit-learn
-- PyTorch
+This project explores **unsupervised clustering using Artificial Neural Networks (ANNs)** by leveraging an internal loss function tailored for clustering quality, specifically applied to customer segmentation.
 
-Dataset:
---------
-- `Mall_Customers.csv` (must be in the same directory as the notebook)
-- It contains 5 features : `CustomerID`, `Gender`, `Age`, `Annual Income (k$)`, `Spending Score (1-100)`
-- `CustomerID` feature is just redundant
-- `Gender` is a categorical feature. We use one hot encoding to convert it into a numerical feature
-- It contains 200 sample data points
+Traditionally, clustering is done using methods like K-Means or DBSCAN. However, we propose a **novel approach where the ANN is trained using a custom-defined clustering-based loss function**—the **Min-Max-Jump (MMJ) K-Means Loss**—enabling it to act as a fully unsupervised clustering system.
 
-Requirements:
--------------
-Install the following Python packages (if not already installed):
+---
 
+## 📊 Dataset
+
+**Mall Customers Segmentation** ([Kaggle Link](https://www.kaggle.com/datasets/vjchoudhary7/customer-segmentation-tutorial-in-python))
+
+- Contains 200 customer records with the following features:
+  - `CustomerID` (ignored)
+  - `Gender` (One-hot encoded)
+  - `Age`
+  - `Annual Income (k$)`
+  - `Spending Score (1-100)`
+
+---
+
+## 🔧 Methodology
+
+### 1. Exploratory Data Analysis (EDA)
+- Plotted distributions and scatterplots
+- Observed weak correlations; e.g., age negatively correlates with spending score
+- Identified potential cluster formations based on visual inspection
+
+### 2. Dimensionality Reduction
+Implemented **Autoencoders** using PyTorch:
+- Compress high-dimensional features into a latent representation
+- Compared three architectures (shallow to deep) to prevent under/overfitting
+- Selected the middle-depth autoencoder (4→3→2→3→4) based on reconstruction loss and latent structure
+
+### 3. Clustering via ANN
+Designed 4 different ANN architectures:
+- Each architecture had 7 output neurons (max cluster assumption)
+- Applied **softmax** to output for fuzzy clustering
+- Implemented **MMJ K-Means Loss** as training objective
+
+#### 🧮 Loss Function
+\[
+L_s = \frac{1}{N} \sum_{i=1}^{N} \sum_{k=1}^{K} \mathbb{1}\{c_i = k\} \|x_i - \mu_k\|^2 (2 - P(x_i))
+\]
+
+- \( \mu_k \): centroid of cluster k  
+- \( P(x_i) \): soft assignment probability  
+- \( \mathbb{1}\{c_i = k\} \): hard cluster assignment  
+
+### 4. Evaluation Metric
+Used **Silhouette Coefficient** to assess internal cluster quality:
+- Values range from -1 to 1
+- > 0.5: optimal clusters
+- 0–0.5: moderate clusters
+- < 0: poor clusters
+
+The best-performing ANN achieved a **Silhouette Score of 0.46**.
+
+---
+
+## 📈 Results & Insights
+
+### ANN divided data into 4 major clusters:
+
+| Cluster | Dominant Gender | Avg. Age | Avg. Income (k$) | Avg. Spending Score | Insight |
+|--------|------------------|----------|------------------|----------------------|--------|
+| 1 (Purple) | Male | 55 | 49.4 | 42.2 | Target vintage products |
+| 2 (Lilac) | Male | 27 | 32.4 | 59.5 | Offer budget-friendly deals |
+| 3 (Green) | Male | 30.6 | 78.6 | 71.8 | Focus on premium, trendy items |
+| 4 (Yellow) | Female | 41.4 | 85.5 | 21.0 | Upsell premium items |
+
+---
+
+## 🛠️ Technologies & Libraries
+
+- **Language:** Python  
+- **Libraries:**
+  - `pandas`, `numpy`
+  - `matplotlib`, `seaborn`
+  - `scikit-learn`
+  - `torch` (PyTorch)
+
+---
+
+## 📂 File Structure
+
+```
+├── ANN_Clustering_Code.ipynb     # Jupyter notebook with full implementation
+├── Mall_Customers.csv            # Dataset file
+├── README.md                     # You are here
+```
+
+---
+
+## 💻 How to Run
+
+### 1. Setup
+Install required libraries:
+
+```bash
 pip install pandas numpy matplotlib seaborn scikit-learn torch
+```
 
-How to Run:
------------
-1. Open the Jupyter Notebook file: `ANN_Clustering_Code.ipynb`
-2. Make sure `Mall_Customers.csv` is present in the same directory.
-3. Run each cell in order from top to bottom.
-4. The notebook will:
-   - Load and preprocess the data
-   - Train the Autoencoder for dimensionality reduction and extracts the Latent Space
-   - Train the ANN for clustering
-   - Output clustering results with visualizations
+### 2. Execution
+- Open `ANN_Clustering_Code.ipynb` in Jupyter Notebook
+- Ensure `Mall_Customers.csv` is in the same directory
+- Run the notebook top to bottom
 
-Output:
--------
-- Exploratory Data Analysis
-- Latent Space of the Dataset
-- Cluster visualizations by different ANNs
-- Insights into targeted Marketing by analyzing each cluster separately.
+---
+
+## 📚 References
+
+- [Clustering with Neural Network and Index (arXiv)](https://arxiv.org/pdf/2212.03853)
+- [Kaggle Dataset: Customer Segmentation](https://www.kaggle.com/datasets/vjchoudhary7/customer-segmentation-tutorial-in-python)
+- [PyTorch Documentation](https://pytorch.org/docs/stable/index.html)
+- [Seaborn Documentation](https://seaborn.pydata.org)
+- [Matplotlib Documentation](https://matplotlib.org)
+
+---
+
+## 🤝 Contribution
+
+All three team members collaborated equally on:
+- Data preprocessing
+- Model design and implementation
+- Visualizations and evaluation
+- Documentation and analysis
+
+---
+
+## 📝 License
+
+This project is developed as a course assignment and is intended for educational purposes.
+
+---
